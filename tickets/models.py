@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.utils import timezone
 
 
 class Customer(models.Model):
@@ -33,7 +34,7 @@ class Ticket(models.Model):
     ]
 
     id = models.AutoField(primary_key=True)
-    ticket_uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True, null=True)
+    ticket_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     reporting_phone = models.ForeignKey(
         Customer, 
         on_delete=models.CASCADE, 
@@ -41,8 +42,8 @@ class Ticket(models.Model):
         db_column='reporting_phone',
         blank=True, null=True
     )
-    ticket_timestamp = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    ticket_subject = models.CharField(max_length=50, choices=TICKET_SUBJECT_CHOICES, blank=True, null=True)
+    ticket_timestamp = models.DateTimeField(auto_now_add=True)
+    ticket_subject = models.CharField(max_length=50, blank=True, null=True)
     structured_response = models.JSONField(blank=True, null=True)
     original_free_text = models.TextField(blank=True, null=True)
     openai_summary = models.TextField(blank=True, null=True)
@@ -50,8 +51,8 @@ class Ticket(models.Model):
     location_source = models.CharField(max_length=20, choices=LOCATION_SOURCE_CHOICES, blank=True, null=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
-    is_alert_sent = models.BooleanField(default=False, blank=True, null=True)
-    is_primary_report = models.BooleanField(default=True, blank=True, null=True)
+    is_alert_sent = models.BooleanField(default=False)
+    is_primary_report = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Ticket {self.id} - {self.ticket_subject} ({self.status})"
