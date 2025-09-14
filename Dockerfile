@@ -1,7 +1,13 @@
 FROM python:3.11-slim
 
-# Install netcat for database connection checking
-RUN apt-get update && apt-get install -y netcat-traditional && rm -rf /var/lib/apt/lists/*
+# Install system dependencies for PostGIS/GeoDjango
+RUN apt-get update && apt-get install -y \
+    netcat-traditional \
+    gdal-bin \
+    libgdal-dev \
+    libgeos-dev \
+    libproj-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

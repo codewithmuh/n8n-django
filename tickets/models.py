@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 from django.utils import timezone
+from django.contrib.gis.db import models as gis_models
+from django.contrib.gis.geos import Point
 
 
 class Customer(models.Model):
@@ -51,8 +53,15 @@ class Ticket(models.Model):
     location_source = models.CharField(max_length=20, choices=LOCATION_SOURCE_CHOICES, blank=True, null=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
+    location = gis_models.PointField(blank=True, null=True, srid=4326)
     is_alert_sent = models.BooleanField(default=False)
     is_primary_report = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        # Auto-create Point field from latitude/longitude
+        if self.latitude and self.longitude:
+            self.location = Point(float(self.longitude), float(self.latitude))
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Ticket {self.id} - {self.ticket_subject} ({self.status})"

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'tickets',
 ]
 
@@ -84,10 +85,10 @@ WSGI_APPLICATION = 'ticketing_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'ticketing_db',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'E.mFeg8ohLV!4!vjct8hyE.rt_m8',
         'HOST': 'db',
         'PORT': '5432',
     }
